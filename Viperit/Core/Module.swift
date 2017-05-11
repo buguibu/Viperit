@@ -11,7 +11,7 @@ import UIKit
 
 private let kTabletSuffix = "Pad"
 
-//MARK: - Viperit Module Protocol
+// MARK: - Viperit Module Protocol
 public protocol ViperitModule {
     var storyboardName: String { get }
 }
@@ -22,15 +22,19 @@ public extension RawRepresentable where Self: ViperitModule, RawValue == String 
     }
 }
 
-//MARK: - Module
+// MARK: - Module
 public struct Module {
     public fileprivate(set) var view: UserInterface!
     public fileprivate(set) var interactor: Interactor!
     public fileprivate(set) var presenter: Presenter!
     public fileprivate(set) var router: Router!
     public fileprivate(set) var displayData: DisplayData!
-    
-    public static func build<T: RawRepresentable & ViperitModule>(_ module: T, bundle: Bundle = Bundle.main, deviceType: UIUserInterfaceIdiom? = nil) -> Module where T.RawValue == String {
+
+    public static func build<T: RawRepresentable & ViperitModule>(_ module: T,
+                                                                    bundle: Bundle = Bundle.main,
+                                                                    deviceType: UIUserInterfaceIdiom? = nil)
+        -> Module where T.RawValue == String {
+
         //Get class types
         let interactorClass = module.classForViperComponent(.interactor, bundle: bundle) as? Interactor.Type
         let presenterClass = module.classForViperComponent(.presenter, bundle: bundle) as? Presenter.Type
@@ -43,12 +47,12 @@ public struct Module {
         let P = presenterClass?.init()
         let R = routerClass?.init()
         let D = displayDataClass?.init()
-        
+
         return build(view: V, interactor: I!, presenter: P!, router: R!, displayData: D!)
     }
 }
 
-//MARK: - Inject Mock Components for Testing
+// MARK: - Inject Mock Components for Testing
 public extension Module {
 
     public mutating func injectMock(view mockView: UserInterface) {
@@ -57,13 +61,13 @@ public extension Module {
         view.proxyDisplayData = displayData
         presenter.proxyView = view
     }
-    
+
     public mutating func injectMock(interactor mockInteractor: Interactor) {
         interactor = mockInteractor
         interactor.proxyPresenter = presenter
         presenter.proxyInteractor = interactor
     }
-    
+
     public mutating func injectMock(presenter mockPresenter: Presenter) {
         presenter = mockPresenter
         presenter.proxyView = view
@@ -73,7 +77,7 @@ public extension Module {
         interactor.proxyPresenter = presenter
         router.proxyPresenter = presenter
     }
-    
+
     public mutating func injectMock(router mockRouter: Router) {
         router = mockRouter
         router.proxyPresenter = presenter
@@ -81,47 +85,62 @@ public extension Module {
     }
 }
 
-
-//MARK: - Helper Methods
+// MARK: - Helper Methods
 fileprivate extension Module {
-    
-    fileprivate static func loadView<T: RawRepresentable & ViperitModule>(forModule module: T, bundle: Bundle, deviceType: UIUserInterfaceIdiom? = nil) -> UserInterface where T.RawValue == String {
-        let viewClass = module.classForViperComponent(.view, bundle: bundle, deviceType: deviceType) as? UIViewController.Type
+
+    fileprivate static func loadView<T: RawRepresentable & ViperitModule>(forModule module: T,
+                                                                            bundle: Bundle,
+                                                                            deviceType: UIUserInterfaceIdiom? = nil)
+        -> UserInterface where T.RawValue == String {
+
+        let viewClass = module.classForViperComponent(.view, bundle: bundle, deviceType: deviceType)
+            as? UIViewController.Type
         let sb = UIStoryboard(name: module.storyboardName.uppercasedFirst, bundle: bundle)
         let viewIdentifier = NSStringFromClass(viewClass!).components(separatedBy: ".").last! as String
         let viewObject = sb.instantiateViewController(withIdentifier: viewIdentifier) as? UserInterface
         return viewObject!
     }
-    
-    fileprivate static func build(view: UserInterface, interactor: Interactor, presenter: Presenter, router: Router, displayData: DisplayData) -> Module {
+
+    fileprivate static func build(view: UserInterface,
+                                  interactor: Interactor,
+                                  presenter: Presenter,
+                                  router: Router,
+                                  displayData: DisplayData) -> Module {
         //View connections
         view.proxyPresenter = presenter
         view.proxyDisplayData = displayData
-        
+
         //Interactor connections
         interactor.proxyPresenter = presenter
-        
+
         //Presenter connections
         presenter.proxyRouter = router
         presenter.proxyInteractor = interactor
         presenter.proxyView = view
-        
+
         //Router connections
         router.proxyPresenter = presenter
-        
-        return Module(view: view, interactor: interactor, presenter: presenter, router: router, displayData: displayData)
+
+        return Module(view: view,
+                      interactor: interactor,
+                      presenter: presenter,
+                      router: router,
+                      displayData: displayData)
     }
 }
 
-
-//MARK: - Private Extension for Application Module generic enum
+// MARK: - Private Extension for Application Module generic enum
 fileprivate extension RawRepresentable where RawValue == String {
 
-    fileprivate func classForViperComponent(_ component: ViperComponent, bundle: Bundle, deviceType: UIUserInterfaceIdiom? = nil) -> Swift.AnyClass? {
+    fileprivate func classForViperComponent(_ component: ViperComponent,
+                                            bundle: Bundle,
+                                            deviceType: UIUserInterfaceIdiom? = nil)
+        -> Swift.AnyClass? {
+
         let className = rawValue.uppercasedFirst + component.rawValue.uppercasedFirst
         let bundleName = bundle.infoDictionary!["CFBundleName"] as? String
         let classInBundle = (bundleName! + "." + className).replacingOccurrences(of: " ", with: "_")
-        
+
         if component == .view {
             let deviceType = deviceType ?? UIScreen.main.traitCollection.userInterfaceIdiom
             let isPad = deviceType == .pad
@@ -131,7 +150,7 @@ fileprivate extension RawRepresentable where RawValue == String {
                 }
             }
         }
-        
+
         return NSClassFromString(classInBundle)
     }
 }

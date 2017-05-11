@@ -9,28 +9,28 @@
 import UIKit
 import Viperit
 
-//MARK: - Public Interface Protocol
+// MARK: - Public Interface Protocol
 protocol SecondViewInterface {
 }
 
-//MARK: Second View
+// MARK: Second View
 final class SecondView: UserInterface {
-    
+
     @IBAction func closeButtonPressed() {
         presenter.close()
     }
 }
 
-//MARK: - Public interface
+// MARK: - Public interface
 extension SecondView: SecondViewInterface {
 }
 
 // MARK: - VIPER COMPONENTS API (Auto-generated code)
 private extension SecondView {
-    var presenter: SecondPresenter {
-        return _presenter as! SecondPresenter
+    var presenter: SecondPresenter? {
+        return proxyPresenter as? SecondPresenter
     }
-    var displayData: SecondDisplayData {
-        return _displayData as! SecondDisplayData
+    var displayData: SecondDisplayData? {
+        return proxyDisplayData as? SecondDisplayData
     }
 }

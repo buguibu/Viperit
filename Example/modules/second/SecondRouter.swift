@@ -10,7 +10,7 @@ import UIKit
 import Viperit
 
 final class SecondRouter: Router {
-    
+
     func close() {
         _view.dismiss(animated: true, completion: nil)
     }
@@ -18,7 +18,8 @@ final class SecondRouter: Router {
 
 // MARK: - VIPER COMPONENTS API (Auto-generated code)
 private extension SecondRouter {
-    var presenter: SecondPresenter {
-        return _presenter as! SecondPresenter
+
+    var presenter: SecondPresenter? {
+        return proxyPresenter as? SecondPresenter
     }
 }

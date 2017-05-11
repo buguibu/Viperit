@@ -19,7 +19,7 @@ final class HomeInteractor: Interactor {
 
 // MARK: - VIPER COMPONENTS API (Auto-generated code)
 private extension HomeInteractor {
-    var presenter: HomePresenter {
-        return _presenter as! HomePresenter
+    var presenter: HomePresenter? {
+        return proxyPresenter as? HomePresenter
     }
 }

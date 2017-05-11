@@ -14,7 +14,7 @@ final class SecondInteractor: Interactor {
 
 // MARK: - VIPER COMPONENTS API (Auto-generated code)
 private extension SecondInteractor {
-    var presenter: SecondPresenter {
-        return _presenter as! SecondPresenter
+    var presenter: SecondPresenter? {
+        return proxyPresenter as? SecondPresenter
     }
 }

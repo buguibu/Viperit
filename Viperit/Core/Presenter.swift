@@ -10,7 +10,7 @@ public protocol PresenterProtocol {
     var proxyInteractor: Interactor? { get set }
     weak var proxyView: UserInterface? { get set }
     var proxyRouter: Router? { get set }
-        
+
     func setupView(data: Any)
     func viewHasLoaded()
     func viewIsAboutToAppear()
@@ -23,9 +23,9 @@ open class Presenter: PresenterProtocol {
     public var proxyInteractor: Interactor?
     public weak var proxyView: UserInterface?
     public var proxyRouter: Router?
-    
+
     required public init() { }
-    
+
     open func setupView(data: Any) {
         print(ViperitError.methodNotImplemented.description)
     }

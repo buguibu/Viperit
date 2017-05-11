@@ -10,16 +10,16 @@ import Foundation
 import Viperit
 
 final class HomePresenter: Presenter {
-    
+
     override func viewIsAboutToAppear() {
         loadContent()
     }
-    
+
     func reactToSomeInteractorOperation() {
         print("Home Presenter Reacted to Some Interactor Operation")
         self.view.showInfo(message: "CONTENT_LOADED")
     }
-    
+
     func showSecondModule() {
         router.showSecondModule()
     }
@@ -32,16 +32,15 @@ extension HomePresenter {
     }
 }
 
-
 // MARK: - VIPER COMPONENTS API (Auto-generated code)
 private extension HomePresenter {
-    var view: HomeViewInterface {
-        return _view as! HomeViewInterface
+    var view: HomeViewInterface? {
+        return proxyView as? HomeViewInterface
     }
-    var interactor: HomeInteractor {
-        return _interactor as! HomeInteractor
+    var interactor: HomeInteractor? {
+        return proxyInteractor as? HomeInteractor
     }
-    var router: HomeRouter {
-        return _router as! HomeRouter
+    var router: HomeRouter? {
+        return proxyRouter as? HomeRouter
     }
 }

@@ -16,7 +16,7 @@ class RouterTests: XCTestCase {
     
     func testEmbedInNavigationController() {
         let module = createTestModule()
-        let router = module.router as! SampleRouter
+        let router = module.router as? SampleRouter
         let navigationController = router.embedInNavigationController()
         
         //Check that there is one view in the stack and that is a SampleView

@@ -18,7 +18,7 @@ final class HomeRouter: Router {
 
 // MARK: - VIPER COMPONENTS API (Auto-generated code)
 private extension HomeRouter {
-    var presenter: HomePresenter {
-        return _presenter as! HomePresenter
+    var presenter: HomePresenter? {
+        return proxyPresenter as? HomePresenter
     }
 }

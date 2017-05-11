@@ -11,7 +11,7 @@ import UIKit
 public protocol RouterProtocol {
     weak var proxyPresenter: Presenter? { get set }
     var proxyView: UserInterface? { get }
-    
+
     func show(inWindow window: UIWindow?, embedInNavController: Bool, setupData: Any?, makeKeyAndVisible: Bool)
     func show(from: UIViewController, embedInNavController: Bool, setupData: Any?)
     func show(from containerView: UIViewController, insideView targetView: UIView, setupData: Any?)
@@ -23,7 +23,10 @@ open class Router: RouterProtocol {
         return proxyPresenter!.proxyView
     }
     
-    open func show(inWindow window: UIWindow?, embedInNavController: Bool = false, setupData: Any? = nil, makeKeyAndVisible: Bool = true) {
+    open func show(inWindow window: UIWindow?,
+                   embedInNavController: Bool = false,
+                   setupData: Any? = nil,
+                   makeKeyAndVisible: Bool = true) {
         process(setupData: setupData)
         let view = embedInNavController ? embedInNavigationController() : proxyView
         window?.rootViewController = view

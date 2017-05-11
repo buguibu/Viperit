@@ -23,10 +23,10 @@ extension SampleView: SampleViewInterface {
 
 // MARK: - VIPER COMPONENTS API (Auto-generated code)
 private extension SampleView {
-    var presenter: SamplePresenterInterface {
-        return _presenter as! SamplePresenterInterface
+    var presenter: SamplePresenterInterface? {
+        return proxyPresenter as? SamplePresenterInterface
     }
-    var displayData: SampleDisplayData {
-        return _displayData as! SampleDisplayData
+    var displayData: SampleDisplayData? {
+        return proxyDisplayData as? SampleDisplayData
     }
 }

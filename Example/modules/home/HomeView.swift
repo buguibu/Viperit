@@ -9,23 +9,23 @@
 import UIKit
 import Viperit
 
-
-//MARK: - Public Interface Protocol
+// MARK: - Public Interface Protocol
 protocol HomeViewInterface {
     func showLoading()
     func showInfo(message: String)
 }
 
-//MARK: Home View
+// MARK: Home View
 final class HomeView: UserInterface {
+
     @IBOutlet weak var messageLabel: UILabel!
-    
+
     @IBAction func goToSecondModuleButtonPressed() {
         presenter.showSecondModule()
     }
 }
 
-//MARK: - Public interface
+// MARK: - Public interface
 extension HomeView: HomeViewInterface {
     func showLoading() {
         messageLabel.text = displayData.loadingText
@@ -37,12 +37,10 @@ extension HomeView: HomeViewInterface {
 
 // MARK: - VIPER COMPONENTS API (Auto-generated code)
 private extension HomeView {
-    var presenter: HomePresenter {
-        return _presenter as! HomePresenter
+    var presenter: HomePresenter? {
+        return proxyPresenter as? HomePresenter
     }
-    var displayData: HomeDisplayData {
-        return _displayData as! HomeDisplayData
+    var displayData: HomeDisplayData? {
+        return proxyDisplayData as? HomeDisplayData
     }
 }
-
-

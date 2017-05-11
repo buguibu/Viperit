@@ -20,16 +20,15 @@ extension SamplePresenter: SamplePresenterInterface {
 
 }
 
-
 // MARK: - VIPER COMPONENTS API (Auto-generated code)
 private extension SamplePresenter {
-    var view: SampleViewInterface {
-        return _view as! SampleViewInterface
+    var view: SampleViewInterface? {
+        return proxyView as? SampleViewInterface
     }
-    var interactor: SampleInteractor {
-        return _interactor as! SampleInteractor
+    var interactor: SampleInteractor? {
+        return proxyInteractor as? SampleInteractor
     }
-    var router: SampleRouter {
-        return _router as! SampleRouter
+    var router: SampleRouter? {
+        return proxyRouter as? SampleRouter
     }
 }

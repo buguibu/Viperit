@@ -13,7 +13,7 @@ import Viperit
 final class SecondViewPad: UserInterface {
 }
 
-//MARK: - Public interface implementation
+// MARK: - Public interface implementation
 extension SecondViewPad: SecondViewInterface {
     @IBAction func close() {
         presenter.close()
@@ -22,10 +22,10 @@ extension SecondViewPad: SecondViewInterface {
 
 // MARK: - VIPER COMPONENTS API (Auto-generated code)
 private extension SecondViewPad {
-    var presenter: SecondPresenter {
-        return _presenter as! SecondPresenter
+    var presenter: SecondPresenter? {
+        return proxyPresenter as? SecondPresenter
     }
-    var displayData: SecondDisplayData {
-        return _displayData as! SecondDisplayData
+    var displayData: SecondDisplayData? {
+        return proxyDisplayData as? SecondDisplayData
     }
 }

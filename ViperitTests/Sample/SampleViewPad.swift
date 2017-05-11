@@ -19,10 +19,10 @@ extension SampleViewPad: SampleViewInterface {
 
 // MARK: - VIPER COMPONENTS API (Auto-generated code)
 private extension SampleViewPad {
-    var presenter: SamplePresenter {
-        return _presenter as! SamplePresenter
+    var presenter: SamplePresenter? {
+        return proxyPresenter as? SamplePresenter
     }
-    var displayData: SampleDisplayData {
-        return _displayData as! SampleDisplayData
+    var displayData: SampleDisplayData? {
+        return proxyDisplayData as? SampleDisplayData
     }
 }

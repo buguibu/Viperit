@@ -10,22 +10,21 @@ import Foundation
 import Viperit
 
 final class SecondPresenter: Presenter {
-    
+
     func close() {
         router.close()
     }
 }
 
-
 // MARK: - VIPER COMPONENTS API (Auto-generated code)
 private extension SecondPresenter {
-    var view: SecondViewInterface {
-        return _view as! SecondViewInterface
+    var view: SecondViewInterface? {
+        return proxyView as? SecondViewInterface
     }
-    var interactor: SecondInteractor {
-        return _interactor as! SecondInteractor
+    var interactor: SecondInteractor? {
+        return proxyInteractor as? SecondInteractor
     }
-    var router: SecondRouter {
-        return _router as! SecondRouter
+    var router: SecondRouter? {
+        return proxyRouter as? SecondRouter
     }
 }

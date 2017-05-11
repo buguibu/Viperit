@@ -9,7 +9,7 @@
 import Foundation
 import Viperit
 
-//MARK: - Application modules
+// MARK: - Application modules
 enum AppModules: String, ViperitModule {
     case home
     case second

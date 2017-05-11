@@ -12,6 +12,6 @@ public protocol InteractorProtocol {
 
 open class Interactor: InteractorProtocol {
     public weak var proxyPresenter: Presenter?
-    
+
     required public init() { }
 }
