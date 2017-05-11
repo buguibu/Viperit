@@ -9,8 +9,8 @@
 import UIKit
 
 public protocol RouterProtocol {
-    weak var _presenter: Presenter! { get set }
-    var _view: UserInterface! { get }
+    weak var proxyPresenter: Presenter? { get set }
+    var proxyView: UserInterface? { get }
     
     func show(inWindow window: UIWindow?, embedInNavController: Bool, setupData: Any?, makeKeyAndVisible: Bool)
     func show(from: UIViewController, embedInNavController: Bool, setupData: Any?)
@@ -18,14 +18,14 @@ public protocol RouterProtocol {
 }
 
 open class Router: RouterProtocol {
-    public weak var _presenter: Presenter!
-    public var _view: UserInterface! {
-        return _presenter._view
+    public weak var proxyPresenter: Presenter?
+    public var proxyView: UserInterface? {
+        return proxyPresenter!.proxyView
     }
     
     open func show(inWindow window: UIWindow?, embedInNavController: Bool = false, setupData: Any? = nil, makeKeyAndVisible: Bool = true) {
         process(setupData: setupData)
-        let view = embedInNavController ? embedInNavigationController() : _view
+        let view = embedInNavController ? embedInNavigationController() : proxyView
         window?.rootViewController = view
         if makeKeyAndVisible {
             window?.makeKeyAndVisible()
@@ -34,8 +34,8 @@ open class Router: RouterProtocol {
     
     open func show(from: UIViewController, embedInNavController: Bool = false, setupData: Any? = nil) {
         process(setupData: setupData)
-        let view = embedInNavController ? embedInNavigationController() : _view
-        from.show(view, sender: nil)
+        let view = embedInNavController ? embedInNavigationController() : proxyView
+        from.show(view!, sender: nil)
     }
     
     public func show(from containerView: UIViewController, insideView targetView: UIView, setupData: Any? = nil) {
@@ -50,7 +50,7 @@ open class Router: RouterProtocol {
 private extension Router {
     func process(setupData: Any?) {
         if let data = setupData {
-            _presenter.setupView(data: data)
+            proxyPresenter?.setupView(data: data)
         }
     }
 }
@@ -58,9 +58,9 @@ private extension Router {
 //MARK: - Embed view in navigation controller
 public extension Router {
     private func getNavigationController() -> UINavigationController? {
-        if let nav = _view.navigationController {
+        if let nav = proxyView?.navigationController {
             return nav
-        } else if let parent = _view.parent {
+        } else if let parent = proxyView?.parent {
             if let parentNav = parent.navigationController {
                 return parentNav
             }
@@ -69,17 +69,17 @@ public extension Router {
     }
     
     func embedInNavigationController() -> UINavigationController {
-        return getNavigationController() ?? UINavigationController(rootViewController: _view)
+        return getNavigationController() ?? UINavigationController(rootViewController: proxyView!)
     }
 }
 
 //MARK: - Embed view in a container view
 public extension Router {
     func addAsChildView(ofView parentView: UIViewController, insideContainer containerView: UIView) {
-        parentView.addChildViewController(_view)
-        containerView.addSubview(_view.view)
-        stretchToBounds(containerView, view: _view.view)
-        _view.didMove(toParentViewController: parentView)
+        parentView.addChildViewController(proxyView!)
+        containerView.addSubview((proxyView?.view)!)
+        stretchToBounds(containerView, view: (proxyView?.view)!)
+        proxyView?.didMove(toParentViewController: parentView)
     }
     
     private func stretchToBounds(_ holderView: UIView, view: UIView) {

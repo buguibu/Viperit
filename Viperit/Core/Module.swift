@@ -32,19 +32,19 @@ public struct Module {
     
     public static func build<T: RawRepresentable & ViperitModule>(_ module: T, bundle: Bundle = Bundle.main, deviceType: UIUserInterfaceIdiom? = nil) -> Module where T.RawValue == String {
         //Get class types
-        let interactorClass = module.classForViperComponent(.interactor, bundle: bundle) as! Interactor.Type
-        let presenterClass = module.classForViperComponent(.presenter, bundle: bundle) as! Presenter.Type
-        let routerClass = module.classForViperComponent(.router, bundle: bundle) as! Router.Type
-        let displayDataClass = module.classForViperComponent(.displayData, bundle: bundle) as! DisplayData.Type
+        let interactorClass = module.classForViperComponent(.interactor, bundle: bundle) as? Interactor.Type
+        let presenterClass = module.classForViperComponent(.presenter, bundle: bundle) as? Presenter.Type
+        let routerClass = module.classForViperComponent(.router, bundle: bundle) as? Router.Type
+        let displayDataClass = module.classForViperComponent(.displayData, bundle: bundle) as? DisplayData.Type
 
         //Allocate VIPER components
         let V = loadView(forModule: module, bundle: bundle, deviceType: deviceType)
-        let I = interactorClass.init()
-        let P = presenterClass.init()
-        let R = routerClass.init()
-        let D = displayDataClass.init()
+        let I = interactorClass?.init()
+        let P = presenterClass?.init()
+        let R = routerClass?.init()
+        let D = displayDataClass?.init()
         
-        return build(view: V, interactor: I, presenter: P, router: R, displayData: D)
+        return build(view: V, interactor: I!, presenter: P!, router: R!, displayData: D!)
     }
 }
 
@@ -53,31 +53,31 @@ public extension Module {
 
     public mutating func injectMock(view mockView: UserInterface) {
         view = mockView
-        view._presenter = presenter
-        view._displayData = displayData
-        presenter._view = view
+        view.proxyPresenter = presenter
+        view.proxyDisplayData = displayData
+        presenter.proxyView = view
     }
     
     public mutating func injectMock(interactor mockInteractor: Interactor) {
         interactor = mockInteractor
-        interactor._presenter = presenter
-        presenter._interactor = interactor
+        interactor.proxyPresenter = presenter
+        presenter.proxyInteractor = interactor
     }
     
     public mutating func injectMock(presenter mockPresenter: Presenter) {
         presenter = mockPresenter
-        presenter._view = view
-        presenter._interactor = interactor
-        presenter._router = router
-        view._presenter = presenter
-        interactor._presenter = presenter
-        router._presenter = presenter
+        presenter.proxyView = view
+        presenter.proxyInteractor = interactor
+        presenter.proxyRouter = router
+        view.proxyPresenter = presenter
+        interactor.proxyPresenter = presenter
+        router.proxyPresenter = presenter
     }
     
     public mutating func injectMock(router mockRouter: Router) {
         router = mockRouter
-        router._presenter = presenter
-        presenter._router = router
+        router.proxyPresenter = presenter
+        presenter.proxyRouter = router
     }
 }
 
@@ -86,28 +86,28 @@ public extension Module {
 fileprivate extension Module {
     
     fileprivate static func loadView<T: RawRepresentable & ViperitModule>(forModule module: T, bundle: Bundle, deviceType: UIUserInterfaceIdiom? = nil) -> UserInterface where T.RawValue == String {
-        let viewClass = module.classForViperComponent(.view, bundle: bundle, deviceType: deviceType) as! UIViewController.Type
+        let viewClass = module.classForViperComponent(.view, bundle: bundle, deviceType: deviceType) as? UIViewController.Type
         let sb = UIStoryboard(name: module.storyboardName.uppercasedFirst, bundle: bundle)
-        let viewIdentifier = NSStringFromClass(viewClass).components(separatedBy: ".").last! as String
-        let viewObject = sb.instantiateViewController(withIdentifier: viewIdentifier) as! UserInterface
-        return viewObject
+        let viewIdentifier = NSStringFromClass(viewClass!).components(separatedBy: ".").last! as String
+        let viewObject = sb.instantiateViewController(withIdentifier: viewIdentifier) as? UserInterface
+        return viewObject!
     }
     
     fileprivate static func build(view: UserInterface, interactor: Interactor, presenter: Presenter, router: Router, displayData: DisplayData) -> Module {
         //View connections
-        view._presenter = presenter
-        view._displayData = displayData
+        view.proxyPresenter = presenter
+        view.proxyDisplayData = displayData
         
         //Interactor connections
-        interactor._presenter = presenter
+        interactor.proxyPresenter = presenter
         
         //Presenter connections
-        presenter._router = router
-        presenter._interactor = interactor
-        presenter._view = view
+        presenter.proxyRouter = router
+        presenter.proxyInteractor = interactor
+        presenter.proxyView = view
         
         //Router connections
-        router._presenter = presenter
+        router.proxyPresenter = presenter
         
         return Module(view: view, interactor: interactor, presenter: presenter, router: router, displayData: displayData)
     }
@@ -119,8 +119,8 @@ fileprivate extension RawRepresentable where RawValue == String {
 
     fileprivate func classForViperComponent(_ component: ViperComponent, bundle: Bundle, deviceType: UIUserInterfaceIdiom? = nil) -> Swift.AnyClass? {
         let className = rawValue.uppercasedFirst + component.rawValue.uppercasedFirst
-        let bundleName = bundle.infoDictionary!["CFBundleName"] as! String
-        let classInBundle = (bundleName + "." + className).replacingOccurrences(of: " ", with: "_")
+        let bundleName = bundle.infoDictionary!["CFBundleName"] as? String
+        let classInBundle = (bundleName! + "." + className).replacingOccurrences(of: " ", with: "_")
         
         if component == .view {
             let deviceType = deviceType ?? UIScreen.main.traitCollection.userInterfaceIdiom

@@ -9,37 +9,37 @@
 import UIKit
 
 protocol UserInterfaceProtocol {
-    var _presenter: Presenter! { get set }
-    var _displayData: DisplayData! { get set }
+    var proxyPresenter: Presenter? { get set }
+    var proxyDisplayData: DisplayData? { get set }
 }
 
 
 open class UserInterface: UIViewController, UserInterfaceProtocol {
-    public var _presenter: Presenter!
-    public var _displayData: DisplayData!
+    public var proxyPresenter: Presenter?
+    public var proxyDisplayData: DisplayData?
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-        _presenter.viewHasLoaded()
+        proxyPresenter?.viewHasLoaded()
     }
     
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        _presenter.viewIsAboutToAppear()
+        proxyPresenter?.viewIsAboutToAppear()
     }
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        _presenter.viewHasAppeared()
+        proxyPresenter?.viewHasAppeared()
     }
     
     open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        _presenter.viewIsAboutToDisappear()
+        proxyPresenter?.viewIsAboutToDisappear()
     }
     
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        _presenter.viewHasDisappeared()
+        proxyPresenter?.viewHasDisappeared()
     }
 }
