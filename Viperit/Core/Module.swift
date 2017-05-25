@@ -31,8 +31,8 @@ public struct Module {
     public fileprivate(set) var displayData: DisplayData!
 
     public static func build<T: RawRepresentable & ViperitModule>(_ module: T,
-                                                                    bundle: Bundle = Bundle.main,
-                                                                    deviceType: UIUserInterfaceIdiom? = nil)
+                                                                  bundle: Bundle = Bundle.main,
+                                                                  deviceType: UIUserInterfaceIdiom? = nil)
         -> Module where T.RawValue == String {
 
         //Get class types
@@ -89,8 +89,8 @@ public extension Module {
 fileprivate extension Module {
 
     fileprivate static func loadView<T: RawRepresentable & ViperitModule>(forModule module: T,
-                                                                            bundle: Bundle,
-                                                                            deviceType: UIUserInterfaceIdiom? = nil)
+                                                                          bundle: Bundle,
+                                                                          deviceType: UIUserInterfaceIdiom? = nil)
         -> UserInterface where T.RawValue == String {
 
             let viewClass = module.classForViperComponent(.view, bundle: bundle, deviceType: deviceType)

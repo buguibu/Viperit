@@ -22,7 +22,7 @@ open class Router: RouterProtocol {
     public var proxyView: UserInterface? {
         return proxyPresenter!.proxyView
     }
-    
+
     open func show(inWindow window: UIWindow?,
                    embedInNavController: Bool = false,
                    setupData: Any? = nil,
@@ -34,22 +34,22 @@ open class Router: RouterProtocol {
             window?.makeKeyAndVisible()
         }
     }
-    
+
     open func show(from: UIViewController, embedInNavController: Bool = false, setupData: Any? = nil) {
         process(setupData: setupData)
         let view = embedInNavController ? embedInNavigationController() : proxyView
         from.show(view!, sender: nil)
     }
-    
+
     public func show(from containerView: UIViewController, insideView targetView: UIView, setupData: Any? = nil) {
         process(setupData: setupData)
         addAsChildView(ofView: containerView, insideContainer: targetView)
     }
-    
+
     required public init() { }
 }
 
-//MARK: - Process possible setup data
+// MARK: - Process possible setup data
 private extension Router {
     func process(setupData: Any?) {
         if let data = setupData {
@@ -58,7 +58,7 @@ private extension Router {
     }
 }
 
-//MARK: - Embed view in navigation controller
+// MARK: - Embed view in navigation controller
 public extension Router {
     private func getNavigationController() -> UINavigationController? {
         if let nav = proxyView?.navigationController {
@@ -70,13 +70,13 @@ public extension Router {
         }
         return nil
     }
-    
+
     func embedInNavigationController() -> UINavigationController {
         return getNavigationController() ?? UINavigationController(rootViewController: proxyView!)
     }
 }
 
-//MARK: - Embed view in a container view
+// MARK: - Embed view in a container view
 public extension Router {
     func addAsChildView(ofView parentView: UIViewController, insideContainer containerView: UIView) {
         parentView.addChildViewController(proxyView!)
@@ -84,7 +84,7 @@ public extension Router {
         stretchToBounds(containerView, view: (proxyView?.view)!)
         proxyView?.didMove(toParentViewController: parentView)
     }
-    
+
     private func stretchToBounds(_ holderView: UIView, view: UIView) {
         view.translatesAutoresizingMaskIntoConstraints = false
         let pinTop = NSLayoutConstraint(item: view, attribute: .top, relatedBy: .equal,

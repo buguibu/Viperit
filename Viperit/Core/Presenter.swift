@@ -29,7 +29,7 @@ open class Presenter: NSObject, PresenterProtocol {
     open func setupView(data: Any) {
         print(ViperitError.methodNotImplemented.description)
     }
-    
+
     open func viewHasLoaded() {}
     open func viewIsAboutToAppear() {}
     open func viewHasAppeared() {}
