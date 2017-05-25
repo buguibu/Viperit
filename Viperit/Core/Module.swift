@@ -93,12 +93,12 @@ fileprivate extension Module {
                                                                             deviceType: UIUserInterfaceIdiom? = nil)
         -> UserInterface where T.RawValue == String {
 
-        let viewClass = module.classForViperComponent(.view, bundle: bundle, deviceType: deviceType)
-            as? UIViewController.Type
-        let sb = UIStoryboard(name: module.storyboardName.uppercasedFirst, bundle: bundle)
-        let viewIdentifier = NSStringFromClass(viewClass!).components(separatedBy: ".").last! as String
-        let viewObject = sb.instantiateViewController(withIdentifier: viewIdentifier) as? UserInterface
-        return viewObject!
+            let viewClass = module.classForViperComponent(.view, bundle: bundle, deviceType: deviceType)
+                as? UIViewController.Type
+            let sb = UIStoryboard(name: module.storyboardName.uppercasedFirst, bundle: bundle)
+            let viewIdentifier = NSStringFromClass(viewClass!).components(separatedBy: ".").last! as String
+            let viewObject = sb.instantiateViewController(withIdentifier: viewIdentifier) as? UserInterface
+            return viewObject!
     }
 
     fileprivate static func build(view: UserInterface,
