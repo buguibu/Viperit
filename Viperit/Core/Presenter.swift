@@ -19,12 +19,12 @@ public protocol PresenterProtocol {
     func viewHasDisappeared()
 }
 
-open class Presenter: PresenterProtocol {
+open class Presenter: NSObject, PresenterProtocol {
     public var proxyInteractor: Interactor?
     public weak var proxyView: UserInterface?
     public var proxyRouter: Router?
 
-    required public init() { }
+    required public override init() { }
 
     open func setupView(data: Any) {
         print(ViperitError.methodNotImplemented.description)
